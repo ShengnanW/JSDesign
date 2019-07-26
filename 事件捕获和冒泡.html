@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+    <head lang="zh-CN">
+        <meta charset="utf-8"/>
+    </head>
+    <body>
+        <div id="parent">
+            <div id="child" style="height: 200px;background: #00cccc">
+                事件捕获和冒泡
+            </div>
+        </div>
+        <script>
+            // 事件先捕获在冒泡，本身触发事件的对象按JS代码顺序执行
+            let parent = document.querySelector('#parent');
+            let child = document.querySelector('#child');
+            parent.addEventListener('click', () =>alert('parent, bubble'));  //4
+            parent.addEventListener('click', () =>alert('parent, capture'), true);  //1
+            child.addEventListener('click', () =>alert('child, bubble'));  // 2
+            child.addEventListener('click', () =>alert('child, capture'), true); //3
+        </script>
+    </body>
+</html>

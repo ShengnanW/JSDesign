@@ -21,6 +21,8 @@ CSS 和 HTML 是网页开发中布局相关的组成部分，涉及的内容比�
 *   理解语义化
 *   CSS3 动画
 *   重绘和回流
+*   js动画和css动画比较
+*   利用css实现CPU加速
 
 * * *
 
@@ -638,6 +640,15 @@ for(var i = 0; i < data.length; i++){
 ```
 
 上面的代码在循环中每次都获取`dom`，然后对其内部的 HTML 进行累加`li`，每次都会操作 DOM 结构，可以改成使用`documentFragment`或者先遍历组成 HTML 的字符串，最后操作一次`innerHTML`。
+
+## css实现动画GPU渲染---不会触发重绘
+[](https://www.jianshu.com/p/d1e16a2e88c1);
+- 开始GPU渲染的属性：filter、opacity、transform
+- 3D 或者 CSS transform : 3D 和 2D 的区别在于--浏览器在页面渲染前为3D动画创建独立的符合图层，而在运行期间为2D动画创建
+- <video> 和 <canvas> 标签
+- CSS filters
+- 元素覆盖时，比如使用了 z-index 属性
+
 
 * * *
 

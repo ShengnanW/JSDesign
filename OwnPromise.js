@@ -60,64 +60,65 @@ class OwnPromise{
     }
 }
 
-// class Mypromise{
-//     constructor(executor){
-//       this.state = 'pending';
-//       this.value = undefined;
-//       this.reason = undefined;
-//       // 成功存放的数组
-//       this.onResolvedCallbacks = [];
-//       // 失败存放法数组
-//       this.onRejectedCallbacks = [];
-//       let resolve = value => {
-//         if (this.state === 'pending') {
-//           this.state = 'fulfilled';
-//           this.value = value;
-//           // 一旦resolve执行，调用成功数组的函数
-//           this.onResolvedCallbacks.forEach(fn=>fn());
-//         }
-//       };
-//       let reject = reason => {
-//         if (this.state === 'pending') {
-//           this.state = 'rejected';
-//           this.reason = reason;
-//           // 一旦reject执行，调用失败数组的函数
-//           this.onRejectedCallbacks.forEach(fn=>fn());
-//         }
-//       };
-//       try{
-//         executor(resolve, reject);
-//       } catch (err) {
-//         reject(err);
-//       }
-//     }
-//     then(onFulfilled,onRejected) {
-//       if (this.state === 'fulfilled') {
-//         onFulfilled(this.value);
-//       };
-//       if (this.state === 'rejected') {
-//         onRejected(this.reason);
-//       };
-//       // 当状态state为pending时
-//       if (this.state === 'pending') {
-//         // onFulfilled传入到成功数组
-//         this.onResolvedCallbacks.push(()=>{
-//           onFulfilled(this.value);
-//         })
-//         // onRejected传入到失败数组
-//         this.onRejectedCallbacks.push(()=>{
-//           onRejected(this.reason);
-//         })
-//       }
-//     }
-// }
+// 简易版Promise
+function P(fn) {
+    var events = [];
+    this.then = function(f) {
+      events.push(f);
+      return this;
+    }
+    function resolve(newValue) {
+      var f = events.shift();
+      f(newValue, resolve);
+    }
+    fn(resolve);
+}
 
-// 测试
-function test() {
-    let myPromise = new OwnPromise((resolvefn, rejectFn) => {
-        setTimeout(() => resolvefn(111), 2000);
+const all  = function (promiseArr) {
+    if (!Array.isArray(promiseArr)) {
+        throw new TypeError ('you must pass an array');
+    }
+
+    return new Promise ((resolve, reject) => {
+        let result = [];
+        let index = 0;
+        for (const i in promiseArr) {
+            const ele = promiseArr [i];
+            if (typeof ele === 'object' && typeof ele.then === 'function') {
+                ele.then(res => {
+                    result[i] = res;
+                    if (--index === 0) resolve(result);
+                }, reject);
+                index ++;
+            } else {
+                result[i] = ele;
+            }
+             
+        }
     });
-    myPromise.then((res) => console.log(res));
+};
+
+const race = function (iterable) {
+    return new Promise ((resolve, reject) => {
+        for (const i in iterable) {
+            const item = iterable[i];
+            if (typeof item === 'object' && typeof item.then === 'function') {
+                item.then(resolve, reject);
+            } else {
+                resolve(item);
+            }
+        }
+    });
+};
+
+function test() {
+    // let myPromise = new OwnPromise((resolvefn, rejectFn) => {
+    //     setTimeout(() => resolvefn(111), 2000);
+    // });
+    // myPromise.then((res) => console.log(res));
+    const p1 = new Promise(resolve => setTimeout(resolve, 200, 1));
+    const p2 = new Promise(resolve =>setTimeout(resolve, 100, 2));
+    all([p1, p2]).then(res => console.log(res));
 }
 
 test();
