@@ -64,7 +64,7 @@ class OwnPromise{
 function P(fn) {
     var events = [];
     this.then = function(f) {
-      events.push(f);
+      events.push(f); 
       return this;
     }
     function resolve(newValue) {
