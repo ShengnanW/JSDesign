@@ -50,12 +50,6 @@ const mergePromise1 = (ajaxArray) => {
       }, reject);
     }
     handlePromise(0);
-    // for (let i = 0; i < ajaxArray.length; i++) {
-    //   //循环遍历数组
-    //   ajaxArray[i]().then((data) => {
-    //     handleData(i, data); //将结果和索引传入handleData函数
-    //   }, reject);
-    // }
   });
 };
 const mergePromise2 = (ajaxArray) =>

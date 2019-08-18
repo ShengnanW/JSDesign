@@ -1,6 +1,4 @@
-/**
- * Created by lin on 2018/8/25.
- */
+
 const M = 10,
   N = 10;
 const matrix = [
